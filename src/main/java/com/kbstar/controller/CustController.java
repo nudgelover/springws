@@ -1,8 +1,10 @@
 package com.kbstar.controller;
 
 
+import com.kbstar.Service.CustService;
 import com.kbstar.dto.Cust;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,14 +43,22 @@ public class CustController {
         model.addAttribute("center",dir+"add");
         return "index";
     }
+
+    @Autowired
+    CustService service;
     @RequestMapping("/all")
     public String all(Model model) {
-        List<Cust> list = new ArrayList<>();
-        list.add(new Cust("id01", "pwd01", "james"));
-        list.add(new Cust("id02", "pwd01", "james2"));
-        list.add(new Cust("id03", "pwd01", "james3"));
-        list.add(new Cust("id04", "pwd01", "james4"));
-        list.add(new Cust("id05", "pwd01", "james5"));
+        List<Cust> list = null;
+        try {
+            list = service.get();
+            for(Cust cust:list){
+                log.info(cust.toString());}
+
+        } catch (Exception e) {
+            log.info("시스템 장애입니다.---------------------------------------------");
+            e.printStackTrace();
+        }
+
         model.addAttribute("clist",list);
 
         model.addAttribute("left",dir+"left");

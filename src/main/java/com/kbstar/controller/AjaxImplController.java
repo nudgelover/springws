@@ -1,9 +1,12 @@
 package com.kbstar.controller;
 
+import com.kbstar.Service.MarkerService;
 import com.kbstar.dto.Cust;
 import com.kbstar.dto.Marker;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-
+@Slf4j
 @RestController
 public class AjaxImplController {
     @RequestMapping("/getservertime")
@@ -56,24 +59,20 @@ public class AjaxImplController {
         return ja;
     }
 
+    @Autowired
+    MarkerService service;
+
     @RequestMapping("/markers")
     public Object markers(String loc) {
-        List<Marker> list = new ArrayList<>();
-
-        if (loc.equals("s")) {
-            list.add(new Marker(100, "국밥", "http://www.nate.com", 37.5688, 126.94444, "a.png", "s"));
-            list.add(new Marker(101, "떡볶이", "http://www.naver.com", 37.56, 126.96, "b.png", "s"));
-            list.add(new Marker(102, "끼로끼로", "http://www.daum.net", 37.56745463, 126.92226, "c.png", "s"));
-
-        } else if (loc.equals("b")) {
-            list.add(new Marker(200, "국밥2", "http://www.nate.com", 35.19, 129.96, "a.png", "b"));
-            list.add(new Marker(201, "떡볶이2", "http://www.naver.com", 38.56, 129.96, "b.png", "b"));
-            list.add(new Marker(202, "끼로끼로2", "http://www.daum.net", 37.56, 129.96, "c.png", "b"));
-
-        } else if (loc.equals("j")) {
-            list.add(new Marker(300, "국밥3", "http://www.nate.com", 33.56, 126.96, "a.png", "j"));
-            list.add(new Marker(301, "떡볶이3", "http://www.naver.com", 33.56, 126.95, "b.png", "j"));
-            list.add(new Marker(302, "끼로끼로3", "http://www.daum.net", 33.56, 125.84, "c.png", "j"));
+        List<Marker> list = null;
+        try {
+            list = service.get();
+            for(Marker obj:list){
+                log.info(obj.toString());
+            }
+        } catch (Exception e) {
+            log.info("시스템 장애입니다.");
+            e.printStackTrace();
         }
 
         JSONArray ja = new JSONArray();
@@ -90,7 +89,6 @@ public class AjaxImplController {
         }
         return ja;
     }
-
 
 
 }

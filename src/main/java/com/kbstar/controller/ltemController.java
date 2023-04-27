@@ -1,9 +1,12 @@
 package com.kbstar.controller;
 
 
+import com.kbstar.Service.ItemService;
 import com.kbstar.dto.Item;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@Slf4j
 @Controller
 @RequestMapping("/item")
 //cust로 호출된거는 다 여기서 처리하겠다!!  
@@ -33,15 +36,21 @@ public class ltemController {
         model.addAttribute("center", dir + "add");
         return "index";
     }
-
+    @Autowired
+    ItemService service;
     @RequestMapping("/all")
     public String all(Model model) {
-        List<Item> list = new ArrayList<>();
-        list.add(new Item(100, "pants", 1000, "자화상컵.jpeg", new Date()));
-        list.add(new Item(200, "pants", 1000, "명화담요.jpeg", new Date()));
-        list.add(new Item(300, "pants", 1000, "케이스.jpeg", new Date()));
-        list.add(new Item(400, "pants", 1000, "큐브.jpeg", new Date()));
-        list.add(new Item(500, "pants", 1000, "티셔츠.jpeg", new Date()));
+        List<Item> list = null;
+        try {
+            list = service.get();
+            for(Item obj:list){
+                log.info(obj.toString());
+            }
+        } catch (Exception e) {
+            log.info("시스템 장애입니다.");
+            e.printStackTrace();
+        }
+
         model.addAttribute("allItem", list);
         model.addAttribute("left", dir + "left");
         model.addAttribute("center", dir + "all");
