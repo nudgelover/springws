@@ -1,0 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<div class="col-sm-2 sidenav">
+    <p><a href="/ajax/ajax01">ajax01</a></p>
+    <p><a href="/ajax/ajax02">ajax02</a></p>
+    <p><a href="/ajax/ajax03">ajax03</a></p>
+    <p><a href="/ajax/ajax04">ajax04</a></p>
+    <p><a href="/ajax/ajax05">ajax05</a></p>
+</div>
